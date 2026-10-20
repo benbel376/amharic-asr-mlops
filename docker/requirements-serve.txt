@@ -1,0 +1,14 @@
+fastapi==0.150.0
+httpx==0.28.1
+huggingface-hub==0.36.2
+jiwer==4.0.0
+numpy==2.5.4
+pandas==3.0.6
+python-multipart==0.0.32
+pyyaml==6.0.3
+safetensors==0.8.0
+scipy==1.18.1
+soundfile==0.14.0
+tokenizers==0.22.2
+transformers==4.57.6
+uvicorn==0.54.0

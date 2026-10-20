@@ -1,0 +1,21 @@
+{
+  "champion": "tiny-600hr",
+  "candidate": "tiny-600hr-int8",
+  "decision": "REJECT",
+  "reasons": [
+    "overall WER worse by +0.163",
+    "overall CER worse by +0.083",
+    "group clean CER worse by +0.083",
+    "group clean/long CER worse by +0.077",
+    "group clean/short CER worse by +0.096",
+    "group phone CER worse by +0.302",
+    "group phone/long CER worse by +0.165",
+    "group phone/short CER worse by +0.558"
+  ],
+  "rule": {
+    "max_wer_increase": 0.0,
+    "max_cer_increase": 0.0,
+    "max_group_cer_increase": 0.02,
+    "max_p95_latency_s": 3.0
+  }
+}

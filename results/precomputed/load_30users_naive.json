@@ -1,0 +1,14 @@
+{
+  "users": 30,
+  "requests": 60,
+  "ok": 17,
+  "errors": 43,
+  "error_kinds": [
+    "ReadTimeout"
+  ],
+  "p50_s": 14.74,
+  "p95_s": 27.3,
+  "max_s": 29.16,
+  "throughput_rps": 0.28,
+  "wall_s": 60.6
+}

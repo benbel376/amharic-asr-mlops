@@ -1,0 +1,18 @@
+{
+  "files": [
+    {"url": "https://huggingface.co/datasets/google/fleurs/resolve/main/data/am_et/dev.tsv",
+     "dest": "data/raw/dev.tsv", "license": "CC-BY-4.0",
+     "sha256": "6e37bdc090862a810a4e28b5f2148e35ec838b642dbc01ee6ad9504848aa1569"},
+    {"url": "https://huggingface.co/datasets/google/fleurs/resolve/main/data/am_et/audio/dev.tar.gz",
+     "dest": "data/raw/dev.tar.gz", "license": "CC-BY-4.0",
+     "sha256": "7d91176bd88f3a6c8a278809b75871300c3b0ae0650b250a5891f72e285fa20a"}
+  ],
+  "models": [
+    {"repo": "b1n1yam/shook-tiny-amharic-600hr", "revision": "7730909b6142263d491d01684bbda5db8f0e9a7c",
+     "dest": "models/tiny-600hr", "license": "Apache-2.0",
+     "sha256": "3758a4d4f9401fcc2214ca94ec9891f62fecdf15688c887f990f793b4d63139d"},
+    {"repo": "b1n1yam/shook-tiny-amharic-stage2-polish", "revision": "4dc4d84b222a99a21ce71b5d9c41238df4c5d2e3",
+     "dest": "models/tiny-stage2", "license": "Apache-2.0",
+     "sha256": "beeceac0f225ddbaac8c2e7401d4b72b64ab270fe52ec11fad45b8fc5a9ba216"}
+  ]
+}

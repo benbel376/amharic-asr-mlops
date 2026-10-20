@@ -1,0 +1,13 @@
+# Keep the build context small: the image needs only src/, configs/ and docker/requirements-serve.txt.
+# Models and logs are mounted at run time (docker-compose.yml).
+.venv
+_gpu
+models
+data
+logs
+mlruns
+mlflow.db
+results
+notebooks
+**/__pycache__
+.pytest_cache

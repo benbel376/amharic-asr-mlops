@@ -1,0 +1,48 @@
+{
+  "run_name": "tiny-600hr-t225",
+  "model_id": "tiny-600hr",
+  "quantized": false,
+  "normalizer": "am-norm-v1",
+  "max_new_tokens": 225,
+  "size_mb": 151.1,
+  "rtf_clean": 0.0528,
+  "git": "no-git",
+  "overall": {
+    "wer": 0.4052718286655684,
+    "cer": 0.18741633199464525,
+    "wer_raw": 0.5231788079470199,
+    "cer_raw": 0.2175609756097561,
+    "empty_rate": 0.0,
+    "cut_rate": 0.275,
+    "n": 40
+  },
+  "groups": {
+    "clean/long": {
+      "wer": 0.4219948849104859,
+      "cer": 0.21670081967213115,
+      "wer_raw": 0.538659793814433,
+      "cer_raw": 0.24514200298953662,
+      "empty_rate": 0.0,
+      "cut_rate": 0.5238095238095238,
+      "n": 21
+    },
+    "clean/short": {
+      "wer": 0.375,
+      "cer": 0.13223938223938225,
+      "wer_raw": 0.49537037037037035,
+      "cer_raw": 0.16573033707865167,
+      "empty_rate": 0.0,
+      "cut_rate": 0.0,
+      "n": 19
+    },
+    "clean": {
+      "wer": 0.4052718286655684,
+      "cer": 0.18741633199464525,
+      "wer_raw": 0.5231788079470199,
+      "cer_raw": 0.2175609756097561,
+      "empty_rate": 0.0,
+      "cut_rate": 0.275,
+      "n": 40
+    }
+  }
+}

@@ -1,0 +1,96 @@
+# All lab parameters in one place (REP-01). Change here, not in code.
+seed: 0
+
+models:
+  # Same architecture (Whisper tiny, 39M params), two training stages by the same author.
+  champion:  {id: tiny-600hr,  path: models/tiny-600hr}
+  candidate: {id: tiny-stage2, path: models/tiny-stage2}
+
+decode:
+  # Whisper's decoder holds 448 tokens, 4 of them the prompt (<|startoftranscript|><|am|><|transcribe|><|notimestamps|>).
+  # Amharic needs ~2.4 byte-level tokens per character: 225 cut 10 of 40 eval sentences short (episode 1).
+  max_new_tokens: 440
+  num_beams: 1         # greedy: same output on every machine
+
+eval:
+  n_clips: 40          # fixed subset of FLEURS am dev, one clip per sentence (~6 min audio)
+  batch_size: 8
+  normalizer: am-norm-v1
+
+promotion:             # written BEFORE looking at the candidate's numbers (Gate 2 evidence)
+  max_wer_increase: 0.0     # candidate WER must not be worse than champion
+  max_cer_increase: 0.0
+  max_group_cer_increase: 0.02   # no group (clean / phone channel, short / long) loses > 2 CER points
+  max_p95_latency_s: 3.0
+
+shift:                 # simulated phone / cheap headset channel
+  noise_std: 0.01
+  gain: 2.0
+
+monitoring:            # label-free thresholds (MON-01)
+  max_empty_rate: 0.05
+  min_snr_db_median: 15       # eval set median 42.7 dB, phone channel 4.7 dB: device / channel shift
+  max_edit_rate: 0.30         # clinicians change more than 30% of characters -> investigate
+  annotation_queue_edit_rate: 0.20
+
+clinic:                # scripts/simulate_clinic.py: one entry per simulated day
+  plan: [headset, phones, phones, outbreak]
+  # outbreak day: same headsets, but notes now use terms the model never learned. Simulated at text
+  # level: every 4th word of the saved note becomes one of these terms.
+  outbreak_terms: [ኮሌራ, ኦአርኤስ, አጣዳፊ የውሃ ተቅማጥ, ኤምፖክስ]
+  outbreak_every: 4
+
+watcher:               # automated response (src/asr/watcher.py, Practice Guide 9.8)
+  interval_s: 3        # how often it reads the logs
+  window: 10           # clinic requests per window
+  min_requests: 8      # skip windows with fewer usable (not rejected) requests
+  min_per_version: 4   # edit-rate gap needs at least this many corrected notes per version
+  mode: persistent     # naive = one message per bad request (episode 6, wrong path)
+
+alerts:                # written with the monitoring plan, approved at Gate 2 (MON-01, GOV-01)
+  - name: channel_shift
+    kind: Data drift
+    title: new microphones or phones (SNR dropped)
+    signal: snr_db_median
+    below: 15
+    windows: 2
+    severity: P2
+    owner: ASR lead
+    next: find the device batch, evaluate the champion on its audio, Gate 3 review
+    actions: [annotation_queue, draft_gate3]
+  - name: notes_changed
+    kind: Concept drift
+    title: clinicians correct more, audio unchanged
+    signal: edit_rate
+    above: 0.30
+    and: {signal: snr_db_median, above: 15}
+    windows: 2
+    severity: P2
+    owner: ASR lead
+    next: read the corrected notes for new terms, plan a retraining (new candidate, then Gate 2)
+    actions: [annotation_queue, draft_gate3]
+  - name: empty_outputs
+    kind: Service fault
+    title: empty transcripts
+    signal: empty_rate
+    above: 0.05
+    windows: 2
+    severity: P1
+    owner: Ops owner
+    next: check the last release and roll it back
+    actions: []
+  - name: canary_worse
+    kind: Canary
+    title: candidate clearly worse than champion
+    signal: edit_rate_gap
+    above: 0.05
+    span: 2              # pool 2 windows: each version gets ~10 corrected notes
+    windows: 2
+    notify_resolved: false   # after a rollback the candidate gets no traffic: nothing to compare
+    severity: P1
+    owner: Ops owner
+    next: keep the champion; the candidate goes back to validation
+    actions: [rollback_canary]
+
+split:
+  test_fraction: 0.2

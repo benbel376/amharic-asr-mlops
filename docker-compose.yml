@@ -1,0 +1,55 @@
+# Simulated "production server" (facilitator demo; participants use scripts/start_server.sh, no Docker).
+# Tested 20 Oct 2026 with Docker Desktop on Windows 11: build 3 min (2.0 GB image), /health ready for
+# both models, /transcribe and the audio gate give the same answers as the uvicorn setup, canary and
+# monitor page work. Run python scripts/download.py first (models/ is mounted, not copied), and stop
+# start_server.sh first: both use ports 8000, 8050 and 8060. Container log timestamps are UTC.
+#   docker compose -p eaii-asr up -d --build     then open http://localhost:8050 (monitor), :8060 (alerts)
+#   docker compose -p eaii-asr down
+# Moving to a real server: copy this file + models/, run the same command there, and point the
+# client (OpenMRS assistant app, load_test.py, simulate_clinic.py) at http://<server>:8000.
+services:
+  champion:
+    build: {context: ., dockerfile: docker/Dockerfile}
+    image: eaii-asr:0.1
+    environment:
+      ASR_MODEL_PATH: /models/tiny-600hr
+      ASR_MODEL_VERSION: tiny-600hr
+      ASR_MAX_WAITING: "4"
+      ASR_THREADS: "4"
+      ASR_LOG_DIR: /app/logs/v1
+    volumes: ["./models:/models:ro", "./logs:/app/logs"]
+    deploy: {resources: {limits: {cpus: "4", memory: 2g}}}
+    healthcheck: {test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8000/health')"], interval: 15s}
+  candidate:
+    image: eaii-asr:0.1
+    depends_on: [champion]
+    environment:
+      ASR_MODEL_PATH: /models/tiny-stage2
+      ASR_MODEL_VERSION: tiny-stage2
+      ASR_MAX_WAITING: "4"
+      ASR_THREADS: "2"
+      ASR_LOG_DIR: /app/logs/v2
+    volumes: ["./models:/models:ro", "./logs:/app/logs"]
+    deploy: {resources: {limits: {cpus: "2", memory: 2g}}}
+  gateway:
+    image: eaii-asr:0.1
+    depends_on: [champion, candidate]
+    command: ["uvicorn", "asr.gateway:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      CHAMPION_URL: http://champion:8000
+      CANDIDATE_URL: http://candidate:8000
+      CANARY_PERCENT: "0"
+    ports: ["8000:8000"]
+  monitor:
+    image: eaii-asr:0.1
+    command: ["uvicorn", "asr.monitor:app", "--host", "0.0.0.0", "--port", "8050"]
+    environment: {ASR_LOG_DIR: /app/logs}
+    volumes: ["./logs:/app/logs:ro"]
+    ports: ["8050:8050"]
+  watcher:              # added 21 Oct 2026; verified with start_server.sh, not yet inside Docker
+    image: eaii-asr:0.1
+    command: ["uvicorn", "asr.watcher:app", "--host", "0.0.0.0", "--port", "8060"]
+    environment: {ASR_LOG_DIR: /app/logs, GATEWAY_URL: "http://gateway:8000"}
+    # for a real Telegram group add:  env_file: .env   (TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID)
+    volumes: ["./logs:/app/logs", "./data/annotation:/app/data/annotation"]
+    ports: ["8060:8060"]

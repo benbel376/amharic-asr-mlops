@@ -1,0 +1,12 @@
+{
+  "users": 1,
+  "requests": 5,
+  "ok": 5,
+  "errors": 0,
+  "error_kinds": [],
+  "p50_s": 2.66,
+  "p95_s": 3.07,
+  "max_s": 3.73,
+  "throughput_rps": 0.39,
+  "wall_s": 12.7
+}

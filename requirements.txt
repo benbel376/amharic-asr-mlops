@@ -1,0 +1,16 @@
+# Amharic ASR use case - CPU only. Tested: Windows 11, Python 3.12.
+torch>=2.4            # on Windows the PyPI wheel is CPU-only; on Linux use --index-url https://download.pytorch.org/whl/cpu
+transformers>=4.48,<5
+soundfile
+scipy
+numpy
+pandas
+jiwer>=3.0
+pyyaml
+mlflow>=3,<4
+fastapi
+uvicorn
+python-multipart
+httpx
+pytest
+huggingface_hub

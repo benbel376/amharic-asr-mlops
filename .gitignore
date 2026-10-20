@@ -1,0 +1,22 @@
+.venv/
+data/raw/
+data/clips/
+data/shift/
+data/gate_samples/
+data/splits/
+data/*.csv
+data/annotation/*.csv
+models/
+logs/
+mlflow.db
+mlruns/
+results/*.json
+results/*.csv
+results/*.html
+!results/precomputed/
+.env
+__pycache__/
+_gpu/
+
+# internal notes, not for the shared repo
+docs/EVALUATION_OF_AI_ASSISTANT_PROJECT.md

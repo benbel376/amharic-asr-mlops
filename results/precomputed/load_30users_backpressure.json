@@ -1,0 +1,14 @@
+{
+  "users": 30,
+  "requests": 60,
+  "ok": 8,
+  "errors": 52,
+  "error_kinds": [
+    "503"
+  ],
+  "p50_s": 5.86,
+  "p95_s": 7.5,
+  "max_s": 8.93,
+  "throughput_rps": 0.54,
+  "wall_s": 14.8
+}

@@ -19,4 +19,4 @@ __pycache__/
 _gpu/
 
 # internal notes, not for the shared repo
-docs/EVALUATION_OF_AI_ASSISTANT_PROJECT.md
+docs/internal_*

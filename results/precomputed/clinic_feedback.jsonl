@@ -1,56 +1,76 @@
-{"request_id": "0f99284fd478", "model_version": "tiny-600hr", "edit_rate": 0.0256, "day": 1}
-{"request_id": "92040bb893ed", "model_version": "tiny-600hr", "edit_rate": 0.0291, "day": 1}
-{"request_id": "4aacb34608e3", "model_version": "tiny-600hr", "edit_rate": 0.0, "day": 1}
-{"request_id": "d0f2fec3f9ed", "model_version": "tiny-600hr", "edit_rate": 0.0556, "day": 1}
-{"request_id": "cbd2775480f9", "model_version": "tiny-600hr", "edit_rate": 0.1463, "day": 1}
-{"request_id": "dcc3da53c0bd", "model_version": "tiny-600hr", "edit_rate": 0.0526, "day": 1}
-{"request_id": "3298d06f3e6f", "model_version": "tiny-600hr", "edit_rate": 0.0412, "day": 1}
-{"request_id": "d7f9bc7e048b", "model_version": "tiny-600hr", "edit_rate": 0.0714, "day": 1}
-{"request_id": "5e079e9f6983", "model_version": "tiny-600hr", "edit_rate": 0.2727, "day": 1}
-{"request_id": "8eb4ccfd1885", "model_version": "tiny-600hr", "edit_rate": 0.058, "day": 1}
-{"request_id": "24979e133404", "model_version": "tiny-600hr", "edit_rate": 0.2055, "day": 1}
-{"request_id": "6079b201b559", "model_version": "tiny-600hr", "edit_rate": 0.0734, "day": 1}
-{"request_id": "5efb0b260f41", "model_version": "tiny-600hr", "edit_rate": 0.2857, "day": 1}
-{"request_id": "7b4917cafc49", "model_version": "tiny-600hr", "edit_rate": 0.0805, "day": 1}
-{"request_id": "2aff40835592", "model_version": "tiny-600hr", "edit_rate": 0.04, "day": 1}
-{"request_id": "ee7f650372ec", "model_version": "tiny-600hr", "edit_rate": 0.3243, "day": 1}
-{"request_id": "db98c559a54d", "model_version": "tiny-600hr", "edit_rate": 0.0349, "day": 1}
-{"request_id": "378d2c5c5f2d", "model_version": "tiny-600hr", "edit_rate": 0.1468, "day": 1}
-{"request_id": "4315ce1fdc92", "model_version": "tiny-600hr", "edit_rate": 0.1714, "day": 1}
-{"request_id": "0e53a1f33787", "model_version": "tiny-600hr", "edit_rate": 0.1837, "day": 1}
-{"request_id": "0c44a53d456f", "model_version": "tiny-600hr", "edit_rate": 0.767, "day": 2}
-{"request_id": "a98aef62ce4c", "model_version": "tiny-600hr", "edit_rate": 0.2683, "day": 2}
-{"request_id": "3439f8fb55ba", "model_version": "tiny-600hr", "edit_rate": 0.2917, "day": 2}
-{"request_id": "88ddca34557b", "model_version": "tiny-600hr", "edit_rate": 0.4146, "day": 2}
-{"request_id": "b5fc66b42a0e", "model_version": "tiny-600hr", "edit_rate": 0.7544, "day": 2}
-{"request_id": "f4e28368d8c6", "model_version": "tiny-600hr", "edit_rate": 0.7216, "day": 2}
-{"request_id": "3a212e6a4752", "model_version": "tiny-600hr", "edit_rate": 0.8482, "day": 2}
-{"request_id": "a02c6efb8709", "model_version": "tiny-600hr", "edit_rate": 0.4773, "day": 2}
-{"request_id": "37ba5eb46a56", "model_version": "tiny-600hr", "edit_rate": 0.8551, "day": 2}
-{"request_id": "62f992445a45", "model_version": "tiny-600hr", "edit_rate": 1.4679, "day": 2}
-{"request_id": "51da8b09f09e", "model_version": "tiny-600hr", "edit_rate": 0.4286, "day": 2}
-{"request_id": "73e764acf1dc", "model_version": "tiny-600hr", "edit_rate": 0.8506, "day": 2}
-{"request_id": "40d8304de346", "model_version": "tiny-600hr", "edit_rate": 0.88, "day": 2}
-{"request_id": "39fcb09acfa4", "model_version": "tiny-600hr", "edit_rate": 0.7432, "day": 2}
-{"request_id": "f018bba6fdd0", "model_version": "tiny-600hr", "edit_rate": 0.3256, "day": 2}
-{"request_id": "7e1181a03e63", "model_version": "tiny-600hr", "edit_rate": 0.8257, "day": 2}
-{"request_id": "39add32e2f87", "model_version": "tiny-600hr", "edit_rate": 0.3143, "day": 2}
-{"request_id": "c4679ffc75b6", "model_version": "tiny-600hr", "edit_rate": 3.0204, "day": 2}
-{"request_id": "0a3a95b1c27a", "model_version": "tiny-600hr", "edit_rate": 0.767, "day": 3}
-{"request_id": "f91f76681930", "model_version": "tiny-600hr", "edit_rate": 0.2683, "day": 3}
-{"request_id": "737f86ad4393", "model_version": "tiny-600hr", "edit_rate": 0.2917, "day": 3}
-{"request_id": "186a92c484fa", "model_version": "tiny-600hr", "edit_rate": 0.4146, "day": 3}
-{"request_id": "c5814ad32c3b", "model_version": "tiny-600hr", "edit_rate": 0.7544, "day": 3}
-{"request_id": "e519e44853ed", "model_version": "tiny-600hr", "edit_rate": 0.7216, "day": 3}
-{"request_id": "73676c3e8dc5", "model_version": "tiny-600hr", "edit_rate": 0.8482, "day": 3}
-{"request_id": "7a4be37605d0", "model_version": "tiny-600hr", "edit_rate": 0.4773, "day": 3}
-{"request_id": "124e48de4687", "model_version": "tiny-600hr", "edit_rate": 0.8551, "day": 3}
-{"request_id": "cd196b7a28d7", "model_version": "tiny-600hr", "edit_rate": 1.4679, "day": 3}
-{"request_id": "9885cd9b5dac", "model_version": "tiny-600hr", "edit_rate": 0.4286, "day": 3}
-{"request_id": "6c846858458d", "model_version": "tiny-600hr", "edit_rate": 0.8506, "day": 3}
-{"request_id": "2f6e66acc406", "model_version": "tiny-600hr", "edit_rate": 0.88, "day": 3}
-{"request_id": "ebfa3dabb930", "model_version": "tiny-600hr", "edit_rate": 0.7432, "day": 3}
-{"request_id": "0f6e4d8eacad", "model_version": "tiny-600hr", "edit_rate": 0.3256, "day": 3}
-{"request_id": "df50ab9826f7", "model_version": "tiny-600hr", "edit_rate": 0.8257, "day": 3}
-{"request_id": "fe0f60e88655", "model_version": "tiny-600hr", "edit_rate": 0.3143, "day": 3}
-{"request_id": "0b9cb4ebf9f8", "model_version": "tiny-600hr", "edit_rate": 3.0204, "day": 3}
+{"request_id": "e858ebd75a95", "model_version": "tiny-600hr", "clip_id": "10100084691844758967", "edit_rate": 0.0256, "day": 1}
+{"request_id": "2c247c0bd6e1", "model_version": "tiny-600hr", "clip_id": "10176575685515652658", "edit_rate": 0.0291, "day": 1}
+{"request_id": "1844eb8ed20e", "model_version": "tiny-600hr", "clip_id": "10282468355647248781", "edit_rate": 0.0, "day": 1}
+{"request_id": "3f567539d1f9", "model_version": "tiny-600hr", "clip_id": "107077680205457619", "edit_rate": 0.0556, "day": 1}
+{"request_id": "e1ae08da7cc1", "model_version": "tiny-600hr", "clip_id": "11230701465608490649", "edit_rate": 0.1463, "day": 1}
+{"request_id": "bb64fde533ad", "model_version": "tiny-600hr", "clip_id": "1221568799144152303", "edit_rate": 0.0526, "day": 1}
+{"request_id": "9de08458377c", "model_version": "tiny-600hr", "clip_id": "12240009353942836508", "edit_rate": 0.0412, "day": 1}
+{"request_id": "0371701df1b4", "model_version": "tiny-600hr", "clip_id": "12998937052293449003", "edit_rate": 0.0714, "day": 1}
+{"request_id": "f6c1f37c3104", "model_version": "tiny-600hr", "clip_id": "15666012997546634223", "edit_rate": 0.2727, "day": 1}
+{"request_id": "1f8333394da0", "model_version": "tiny-600hr", "clip_id": "15794143307993594233", "edit_rate": 0.058, "day": 1}
+{"request_id": "1d4adff6c1d4", "model_version": "tiny-600hr", "clip_id": "16614583694029754907", "edit_rate": 0.2055, "day": 1}
+{"request_id": "8ba3b16d6733", "model_version": "tiny-600hr", "clip_id": "1695773803039892101", "edit_rate": 0.0734, "day": 1}
+{"request_id": "2ac01c8a8375", "model_version": "tiny-600hr", "clip_id": "16989014604682846922", "edit_rate": 0.2857, "day": 1}
+{"request_id": "c12bb939dc36", "model_version": "tiny-600hr", "clip_id": "17235096421480560869", "edit_rate": 0.0805, "day": 1}
+{"request_id": "601dbe848945", "model_version": "tiny-600hr", "clip_id": "17688406685967410237", "edit_rate": 0.04, "day": 1}
+{"request_id": "8a3887afaa11", "model_version": "tiny-600hr", "clip_id": "18157262313943856495", "edit_rate": 0.3243, "day": 1}
+{"request_id": "ef7b3da3e20f", "model_version": "tiny-600hr", "clip_id": "1889699196006090267", "edit_rate": 0.0349, "day": 1}
+{"request_id": "b4bca171937d", "model_version": "tiny-600hr", "clip_id": "2370326377257659667", "edit_rate": 0.1468, "day": 1}
+{"request_id": "237e5f821141", "model_version": "tiny-600hr", "clip_id": "3399613122419342578", "edit_rate": 0.1714, "day": 1}
+{"request_id": "e3a074ea866b", "model_version": "tiny-600hr", "clip_id": "3493965172888628062", "edit_rate": 0.1837, "day": 1}
+{"request_id": "85c1c28d5930", "model_version": "tiny-600hr", "clip_id": "10176575685515652658", "edit_rate": 0.767, "day": 2}
+{"request_id": "e047ce39b1cc", "model_version": "tiny-600hr", "clip_id": "10282468355647248781", "edit_rate": 0.2683, "day": 2}
+{"request_id": "6d134633bbc2", "model_version": "tiny-600hr", "clip_id": "107077680205457619", "edit_rate": 0.2917, "day": 2}
+{"request_id": "4eb20b55c286", "model_version": "tiny-600hr", "clip_id": "11230701465608490649", "edit_rate": 0.4146, "day": 2}
+{"request_id": "fb2fa83c3932", "model_version": "tiny-600hr", "clip_id": "1221568799144152303", "edit_rate": 0.7544, "day": 2}
+{"request_id": "9ae9b2116e46", "model_version": "tiny-600hr", "clip_id": "12240009353942836508", "edit_rate": 0.7216, "day": 2}
+{"request_id": "00a40ecd9953", "model_version": "tiny-600hr", "clip_id": "12998937052293449003", "edit_rate": 0.8482, "day": 2}
+{"request_id": "93dde9b1fdf8", "model_version": "tiny-600hr", "clip_id": "15666012997546634223", "edit_rate": 0.4773, "day": 2}
+{"request_id": "46b706afded6", "model_version": "tiny-600hr", "clip_id": "15794143307993594233", "edit_rate": 0.8551, "day": 2}
+{"request_id": "48b606fbf753", "model_version": "tiny-600hr", "clip_id": "1695773803039892101", "edit_rate": 1.4679, "day": 2}
+{"request_id": "a70ba5c730d5", "model_version": "tiny-600hr", "clip_id": "16989014604682846922", "edit_rate": 0.4286, "day": 2}
+{"request_id": "7667db19531c", "model_version": "tiny-600hr", "clip_id": "17235096421480560869", "edit_rate": 0.8506, "day": 2}
+{"request_id": "1fc4a56b958c", "model_version": "tiny-600hr", "clip_id": "17688406685967410237", "edit_rate": 0.88, "day": 2}
+{"request_id": "2979ccedaa47", "model_version": "tiny-600hr", "clip_id": "18157262313943856495", "edit_rate": 0.7432, "day": 2}
+{"request_id": "8d66736eb97e", "model_version": "tiny-600hr", "clip_id": "1889699196006090267", "edit_rate": 0.3256, "day": 2}
+{"request_id": "c6e63e3521b9", "model_version": "tiny-600hr", "clip_id": "2370326377257659667", "edit_rate": 0.8257, "day": 2}
+{"request_id": "7927906f1b65", "model_version": "tiny-600hr", "clip_id": "3399613122419342578", "edit_rate": 0.3143, "day": 2}
+{"request_id": "f6557e851efa", "model_version": "tiny-600hr", "clip_id": "3493965172888628062", "edit_rate": 3.0204, "day": 2}
+{"request_id": "3b31508b6423", "model_version": "tiny-600hr", "clip_id": "10176575685515652658", "edit_rate": 0.767, "day": 3}
+{"request_id": "55febb87f0aa", "model_version": "tiny-600hr", "clip_id": "10282468355647248781", "edit_rate": 0.2683, "day": 3}
+{"request_id": "9e61fa5c02b8", "model_version": "tiny-600hr", "clip_id": "107077680205457619", "edit_rate": 0.2917, "day": 3}
+{"request_id": "b64c1af68020", "model_version": "tiny-600hr", "clip_id": "11230701465608490649", "edit_rate": 0.4146, "day": 3}
+{"request_id": "273414d26e14", "model_version": "tiny-600hr", "clip_id": "1221568799144152303", "edit_rate": 0.7544, "day": 3}
+{"request_id": "95f026b47216", "model_version": "tiny-600hr", "clip_id": "12240009353942836508", "edit_rate": 0.7216, "day": 3}
+{"request_id": "91a956a9eb6b", "model_version": "tiny-600hr", "clip_id": "12998937052293449003", "edit_rate": 0.8482, "day": 3}
+{"request_id": "6bc7e704f068", "model_version": "tiny-600hr", "clip_id": "15666012997546634223", "edit_rate": 0.4773, "day": 3}
+{"request_id": "d4b6ff8bc221", "model_version": "tiny-600hr", "clip_id": "15794143307993594233", "edit_rate": 0.8551, "day": 3}
+{"request_id": "71f59398411c", "model_version": "tiny-600hr", "clip_id": "1695773803039892101", "edit_rate": 1.4679, "day": 3}
+{"request_id": "24a05341695e", "model_version": "tiny-600hr", "clip_id": "16989014604682846922", "edit_rate": 0.4286, "day": 3}
+{"request_id": "9a4267374479", "model_version": "tiny-600hr", "clip_id": "17235096421480560869", "edit_rate": 0.8506, "day": 3}
+{"request_id": "46e33fa89656", "model_version": "tiny-600hr", "clip_id": "17688406685967410237", "edit_rate": 0.88, "day": 3}
+{"request_id": "e27b08945b2b", "model_version": "tiny-600hr", "clip_id": "18157262313943856495", "edit_rate": 0.7432, "day": 3}
+{"request_id": "31f95a98f980", "model_version": "tiny-600hr", "clip_id": "1889699196006090267", "edit_rate": 0.3256, "day": 3}
+{"request_id": "42d409283925", "model_version": "tiny-600hr", "clip_id": "2370326377257659667", "edit_rate": 0.8257, "day": 3}
+{"request_id": "d01a73a2fa31", "model_version": "tiny-600hr", "clip_id": "3399613122419342578", "edit_rate": 0.3143, "day": 3}
+{"request_id": "a2f4986bd5db", "model_version": "tiny-600hr", "clip_id": "3493965172888628062", "edit_rate": 3.0204, "day": 3}
+{"request_id": "3d1c68bffbca", "model_version": "tiny-600hr", "clip_id": "10100084691844758967", "edit_rate": 0.3146, "day": 4}
+{"request_id": "bb6753fa2d32", "model_version": "tiny-600hr", "clip_id": "10176575685515652658", "edit_rate": 0.3333, "day": 4}
+{"request_id": "75f4ed613d26", "model_version": "tiny-600hr", "clip_id": "10282468355647248781", "edit_rate": 0.2143, "day": 4}
+{"request_id": "482cac284d6e", "model_version": "tiny-600hr", "clip_id": "107077680205457619", "edit_rate": 0.3875, "day": 4}
+{"request_id": "c22675ab12f9", "model_version": "tiny-600hr", "clip_id": "11230701465608490649", "edit_rate": 0.3171, "day": 4}
+{"request_id": "770bb39d4824", "model_version": "tiny-600hr", "clip_id": "1221568799144152303", "edit_rate": 0.3731, "day": 4}
+{"request_id": "cc1bd7d9973b", "model_version": "tiny-600hr", "clip_id": "12240009353942836508", "edit_rate": 0.3269, "day": 4}
+{"request_id": "51226d66f1b9", "model_version": "tiny-600hr", "clip_id": "12998937052293449003", "edit_rate": 0.35, "day": 4}
+{"request_id": "234e2276382f", "model_version": "tiny-600hr", "clip_id": "15666012997546634223", "edit_rate": 0.4524, "day": 4}
+{"request_id": "1baad8cae20a", "model_version": "tiny-600hr", "clip_id": "15794143307993594233", "edit_rate": 0.35, "day": 4}
+{"request_id": "df41530bbd9e", "model_version": "tiny-600hr", "clip_id": "16614583694029754907", "edit_rate": 0.4881, "day": 4}
+{"request_id": "545dc0c59dcf", "model_version": "tiny-600hr", "clip_id": "1695773803039892101", "edit_rate": 0.375, "day": 4}
+{"request_id": "c69044bd4b11", "model_version": "tiny-600hr", "clip_id": "16989014604682846922", "edit_rate": 0.4595, "day": 4}
+{"request_id": "dc066b9a8041", "model_version": "tiny-600hr", "clip_id": "17235096421480560869", "edit_rate": 0.3725, "day": 4}
+{"request_id": "989ec1aa1ea2", "model_version": "tiny-600hr", "clip_id": "17688406685967410237", "edit_rate": 0.3607, "day": 4}
+{"request_id": "90c0821456d0", "model_version": "tiny-600hr", "clip_id": "18157262313943856495", "edit_rate": 0.5116, "day": 4}
+{"request_id": "8fbe814277c1", "model_version": "tiny-600hr", "clip_id": "1889699196006090267", "edit_rate": 0.303, "day": 4}
+{"request_id": "4a562a3c3c1f", "model_version": "tiny-600hr", "clip_id": "2370326377257659667", "edit_rate": 0.3571, "day": 4}
+{"request_id": "5b64459a1fbc", "model_version": "tiny-600hr", "clip_id": "3399613122419342578", "edit_rate": 0.4625, "day": 4}
+{"request_id": "1c1f83b3e47a", "model_version": "tiny-600hr", "clip_id": "3493965172888628062", "edit_rate": 0.459, "day": 4}

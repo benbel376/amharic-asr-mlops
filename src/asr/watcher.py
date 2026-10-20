@@ -29,6 +29,8 @@ import time
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+import logging
+
 import httpx
 import pandas as pd
 import yaml
@@ -40,6 +42,7 @@ RULES = CFG["alerts"]
 LOG_DIR = Path(os.environ.get("ASR_LOG_DIR", str(ROOT / "logs"))).resolve()
 GATEWAY = os.environ.get("GATEWAY_URL", "http://127.0.0.1:8000")
 QUEUE = ROOT / "data" / "annotation" / "queue.csv"
+log = logging.getLogger("asr.watcher")
 
 
 # ---------------------------------------------------------------- signals
@@ -311,9 +314,7 @@ async def _loop():
         try:
             await asyncio.to_thread(_watcher.step)
         except Exception as e:  # never let one bad log line stop the watcher
-            import traceback
-            traceback.print_exc()
-            print(f"watcher error: {type(e).__name__}: {e}", flush=True)
+            log.error("watcher error: %s: %s", type(e).__name__, e)
         await asyncio.sleep(W["interval_s"])
 
 

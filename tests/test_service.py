@@ -7,7 +7,7 @@ import pytest
 import soundfile as sf
 from fastapi.testclient import TestClient
 
-SECRET = "አበበ በቀለ 0911223344"  # a name and a phone number the model "heard"
+SECRET = "አበበ በቀለ 0911223344"  # synthetic: a made-up name and phone number the model "heard"
 
 
 class FakeEngine:
@@ -49,7 +49,7 @@ def test_logs_never_contain_transcript(client):
     c, logdir = client
     c.post("/transcribe", files={"audio": ("a.wav", wav(speech()), "audio/wav")})
     log = (logdir / "requests.jsonl").read_text(encoding="utf-8")
-    assert "0911223344" not in log and "አበበ" not in log
+    assert SECRET.split()[-1] not in log and SECRET.split()[0] not in log
     ev = json.loads(log.splitlines()[-1])
     assert "text" not in ev and ev["n_chars"] == len(SECRET) and ev["model_version"]
 

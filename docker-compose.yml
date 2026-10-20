@@ -46,7 +46,7 @@ services:
     environment: {ASR_LOG_DIR: /app/logs}
     volumes: ["./logs:/app/logs:ro"]
     ports: ["8050:8050"]
-  watcher:              # added 21 Oct 2026; verified with start_server.sh, not yet inside Docker
+  watcher:              # verified 21 Oct 2026 (Docker and start_server.sh): same alerts and actions
     image: eaii-asr:0.1
     command: ["uvicorn", "asr.watcher:app", "--host", "0.0.0.0", "--port", "8060"]
     environment: {ASR_LOG_DIR: /app/logs, GATEWAY_URL: "http://gateway:8000"}

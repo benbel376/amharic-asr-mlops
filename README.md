@@ -3,8 +3,8 @@
 **A hands-on MLOps lab built around a real Amharic ASR model.** Participants take a working Whisper model and run into the problems that appear once a model leaves the notebook. Each time they propose a fix, then compare it with a tested one.
 
 [![Python 3.12](https://img.shields.io/badge/python-3.12-1C1C1C)](https://www.python.org/)
-[![CPU only](https://img.shields.io/badge/hardware-CPU%20only-1C1C1C)](#quick-start)
-[![No Docker needed](https://img.shields.io/badge/docker-optional-1C1C1C)](#quick-start)
+[![CPU only](https://img.shields.io/badge/hardware-CPU%20only-1C1C1C)](#how-to-run)
+[![No Docker needed](https://img.shields.io/badge/docker-optional-1C1C1C)](#how-to-run)
 [![Tests](https://img.shields.io/badge/tests-39%20passing-02C2DE)](tests/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-EA7201)](LICENSE)
 
@@ -12,7 +12,7 @@ Built for the MLOps capacity-building workshop with the Ethiopian Artificial Int
 
 ---
 
-## The scenario
+## Purpose
 
 A "Speak" button in the EMR (OpenMRS). A clinician dictates a short note in Amharic, the server returns text, and the clinician corrects it and saves. **You own the speech service.**
 
@@ -37,7 +37,7 @@ Every episode follows the same pattern: **do the obvious thing → see the issue
 | 2 | The split that leaks | A random split puts 64% of test sentences in training | Group-aware splits, honest dataset card | Data |
 | 3 | Silence that speaks | The model "hears" a word in silence and fan noise | Input validation before the model | Deployment |
 | 4 | Better on average, worse for some | The newer model and the int8 model look tempting; both lose on phone audio | Promotion rule written in advance, named Gate 2 approver | Validation · Gate 2 |
-| 5 | Thirty clinicians press Speak | 43 of 60 requests time out | Backpressure, load testing, capacity planning | Deployment |
+| 5 | Thirty clinicians press Speak | 36-43 of 60 requests time out | Backpressure, load testing, capacity planning | Deployment |
 | 6 | New phones, then an outbreak | Quality drops with no labels to show it; alerting on every bad request floods the inbox | Label-free monitoring; telling data drift from concept drift; alerts that persist before they fire; automatic, safe responses | Monitoring · Gate 3 |
 | 7 | Canary, rollback, and the logs | The canary is worse; a debug flag logs patient text | Automatic canary rollback; privacy by default in logs | Deployment · Monitoring |
 | 8 | Do our annotators agree? *(optional)* | Annotators "disagree" on spelling variants | Normalise first, adjudicate real differences | Data |
@@ -73,7 +73,7 @@ The **watcher** applies the alert rules in [`configs/params.yaml`](configs/param
 
 Promoting, retraining and deploying always need a person.
 
-## Quick start
+## How to run
 
 **Requirements:** Windows 11 with Git Bash (or Linux/macOS), Python 3.12, [uv](https://docs.astral.sh/uv/), about 2 GB of disk space. No GPU.
 
@@ -93,6 +93,14 @@ bash scripts/start_server.sh stop
 
 On Linux, install the CPU build of PyTorch to avoid CUDA wheels (`--torch-backend cpu` with uv).
 
+## How to reproduce
+
+- **Environment:** every package is pinned in `requirements.lock` (made with `uv pip compile requirements.txt`).
+- **Data and models:** fetched at fixed revisions and checked against SHA-256 hashes (`scripts/downloads.json`).
+- **Parameters:** decoding settings, seeds, promotion rule and alert rules all live in `configs/params.yaml`.
+- **Runs:** every evaluation is an MLflow run (`mlflow.db`) recording the model, normaliser version, decoding settings and git commit.
+- **Fallback:** `results/precomputed/` holds the outputs of the reference run, so any episode can be discussed without running it.
+
 ## Results from the reference run
 
 Windows 11, 24 logical CPUs, no GPU. Error rates are deterministic; timings depend on the machine.
@@ -104,7 +112,7 @@ Windows 11, 24 logical CPUs, no GPU. Error rates are deterministic; timings depe
 | Candidate `tiny-stage2` | 0.2 WER points better overall, 8.1 CER points worse on long phone audio: **rejected** |
 | Champion int8 | 20% smaller, not faster, CER 20.7%: **rejected** |
 | Random vs grouped split | 64% vs 0% of test clips share a sentence with training |
-| 30 concurrent users | naive: 17 of 60 answered; with backpressure: fast 503s, p95 7.5 s |
+| 30 concurrent users | naive: 17-24 of 60 answered, the rest time out; with backpressure: fast 503s, p95 under 8 s |
 | New phones (simulated channel) | edit rate 0.115 → 0.792; data-drift alert after 2 windows |
 | Outbreak vocabulary (simulated) | edit rate 0.378 with unchanged audio; concept-drift alert |
 | Alerting on every bad request | 82 messages for 4 days; with persistence: 3 |
@@ -135,8 +143,14 @@ LAB_GUIDE.md            the participant guide
 FACILITATOR_NOTES.md    timings, discussion questions, fallbacks
 ```
 
-## Authors
+## Framework check
 
-Biniyam Belayneh and Abenezer, for the Palladium–EAII MLOps workshop.
+The workshop's `eaii-mlops check` tool scores a repository against 18 guideline rules. This project passes all of them except two, on purpose:
+- **GOV-01 (no approved Gate 2 record):** filling in that record is the closing exercise of the lab.
+- **LOG-01 (warning):** the command-line reports print to the terminal; the services themselves log in a structured way.
+
+## Owner
+
+Biniyam Belayneh and Abenezer (ASR facilitators), for the Palladium–EAII MLOps workshop.
 
 Code is released under the [MIT licence](LICENSE). Data and models keep their own licences (table above).

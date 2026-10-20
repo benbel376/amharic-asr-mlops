@@ -4,9 +4,9 @@ Labels (correct transcripts) arrive late or never, so production monitoring uses
 
 ## Signals and alert rules
 
-| Signal | Source | Threshold | Persistence | Severity | Owner | Automatic action | Next step for a person |
+| Metric | Source | Threshold | Frequency | Severity | Owner | Automatic action | Response (a person) |
 |---|---|---|---|---|---|---|---|
-| Median SNR (microphone fingerprint) | request log `snr_db` | < 15 dB (eval set 42.7 dB) | 2 windows of 10 requests | P2 | ASR lead | Notify; high-edit clips to the annotation queue; draft Gate 3 record | Find the device batch; evaluate the champion on its audio (data drift, F08) |
+| Median SNR (microphone fingerprint) | request log `snr_db` | < 15 dB (eval set 42.7 dB) | every window of 10 requests; fires after 2 in a row | P2 | ASR lead | Notify; high-edit clips to the annotation queue; draft Gate 3 record | Find the device batch; evaluate the champion on its audio (data drift, F08) |
 | Clinician edit rate with normal SNR | `feedback.jsonl` (edit rate and clip id, no text) | > 0.30 and SNR > 15 dB | 2 windows | P2 | ASR lead | Notify; annotation queue; draft Gate 3 record | Read corrected notes for new terms; plan retraining (concept drift) |
 | Empty-output rate | request log `empty` | > 5% | 2 windows | P1 | Ops owner | Notify | Check the last release; roll back |
 | Candidate vs champion edit rate during a canary | `feedback.jsonl` by `model_version` | gap > 0.05 | 2 checks, each pooling 2 windows | P1 | Ops owner | Notify; **roll the canary back to 0%** | Candidate returns to validation; incident record |

@@ -1,0 +1,7 @@
+# Data is not stored in git. scripts/download.py fetches it at pinned revisions and checks
+# SHA-256 hashes (scripts/downloads.json); scripts/prepare_data.py builds the rest.
+*
+!.gitignore
+!SOURCES.md
+!annotation/
+annotation/*

@@ -10,8 +10,27 @@ At each **PAUSE**, stop. Write your proposal on a sticky note or in the chat (2-
 
 All numbers below were verified on Windows 11 (24 logical CPUs, no GPU) on 20 October 2026. Your timings will differ; error rates should match to the third decimal.
 
-| # | Episode | Time | Core? | Failure | Rule |
-|---|---|---|---|---|---|
+## The framework in action
+
+This lab walks one system through the EAII lifecycle (Practice Guide, section 1.1). Each episode shows one stage, the failure it prevents (Common Issues Catalogue) and the rule that `eaii-mlops check` verifies.
+
+| # | Episode | Time | Lifecycle stage | Gate | Failure | Rule |
+|---|---|---|---|---|---|---|
+| 0 | Set up and check | 10 min | Development | | F13 | ENV-01 |
+| 1 | The WER that lies (normalisation, WER vs CER) | 15 min | Validation | | F12 | REP-02 |
+| 2 | The split that leaks | 5 min | Data | | F11 | DATA-02 |
+| 3 | Silence that speaks (audio gate) | 15 min | Data · Deployment | | F17, F01 | DATA-03 |
+| 4 | Better on average, worse for some (champion vs candidate, int8) | 20 min | Validation | Gate 2 | F14 | GOV-01 |
+| 5 | Thirty clinicians press Speak (deploy, load) | 15 min | Deployment | | F16 | TST-02 |
+| 6 | New phones, then an outbreak (drift and the automated response) | 25 min | Monitoring | Gate 3 trigger | F08, F05, F20 | MON-01 |
+| 7 | Canary, automatic rollback, and what the logs know | 15 min | Deployment · Monitoring | | F19, F18 | GOV-01, SEC-02, LOG-01 |
+| ✓ | Does this project meet the framework? | 5 min | all | Gate 2 record | | all 18 |
+| 8 | Do our annotators agree? | 15 min | optional | | F10 | DATA-02 |
+| 9 | Fine-tune in Colab (groups) | 30 min | take-home · Re-evaluation | | F13 | REP-01 |
+
+Not shown hands-on: Inception and Gate 1 (the scenario above is the one-line version of a PRD) and Retirement. See the Practice Guide.
+
+---|---|---|---|---|---|
 | 0 | Set up and check | 10 min | core | F13 | ENV-01 |
 | 1 | The WER that lies (normalisation, WER vs CER) | 15 min | core | F12 | REP-02 |
 | 2 | The split that leaks | 10 min | core | F11 | DATA-02 |
@@ -50,7 +69,7 @@ ALL OK
 clips: 223  sentences: 124  audio: 39.2 min  gender values: {'FEMALE': 223}
 eval subset: 40 clips, 7.1 min  ->  data/eval.csv
 shifted copies: 40 -> data/shift/   gate samples -> data/gate_samples/
-31 passed
+39 passed
 ```
 No Wi-Fi? Copy `data/raw/` and `models/` from the USB stick, then `python scripts/download.py --verify`.
 
@@ -220,7 +239,7 @@ int8: REJECT, every group worse. Discuss: 40 clips cannot tell 0.2 points apart.
 
 ## Episode 5. Thirty clinicians press Speak (15 min)
 
-**Setup.** Start the "production server" on your laptop: champion, candidate, a gateway (the only URL the EMR knows) and a monitor.
+**Setup.** Start the "production server" on your laptop: champion, candidate, a gateway (the only URL the EMR knows), a monitor and a watcher that raises alerts (episode 6).
 
 ```bash
 bash scripts/start_server.sh
@@ -241,9 +260,9 @@ python scripts/load_test.py --url http://127.0.0.1:8001 --users 30 --requests 2
 ```
 **The issue appears.**
 ```
-"ok": 17, "errors": 43, "error_kinds": ["ReadTimeout"], "p50_s": 14.74, "p95_s": 27.3, "throughput_rps": 0.28
+"ok": 17, "errors": 43, "error_kinds": ["ReadTimeout"], "p50_s": 14.74, "p95_s": 27.3, "throughput_rps": 0.28   (another run: ok 24, errors 36)
 ```
-43 of 60 dictations time out. The ones that succeed wait 15-27 s. Nothing in the service logs an error: requests just queue.
+Between 36 and 43 of 60 dictations time out, depending on the run and the laptop. The ones that succeed wait 15-27 s. Nothing in the service logs an error: requests just queue.
 
 **PAUSE.** What would you change: model, code, server, or the contract with the app?
 
@@ -255,47 +274,86 @@ python scripts/load_test.py --url http://127.0.0.1:8001 --users 30 --requests 2
 ```
 **Check.**
 ```
-"ok": 8, "errors": 52, "error_kinds": ["503"], "p50_s": 5.86, "p95_s": 7.5, "wall_s": 14.8
+"ok": 8, "errors": 52, "error_kinds": ["503"], "p50_s": 5.86, "p95_s": 7.5, "wall_s": 14.8   (another run: p95 4.8 s, wall 9 s)
 ```
-The same laptop cannot serve 30 simultaneous users, but now it fails fast and honestly (14 s instead of 60 s, no hung clients). Real capacity comes from more replicas on the real server: same compose file, more CPUs.
+The same laptop cannot serve 30 simultaneous users, but now it fails fast and honestly (9-15 s instead of 60 s, no hung clients). Real capacity comes from more replicas on the real server: same compose file, more CPUs.
 **F16** latency / load failure. Rule **TST-02** (CI and load checks before release).
 
 ---
 
-## Episode 6. New phones arrive (20 min)
+## Episode 6. New phones, then an outbreak: drift and the automated response (25 min)
 
-**Setup.** Day 1: the usual headsets. Days 2-3: the facility gets a batch of cheap phones (we simulate the channel: 8 kHz, band-pass, noise). There are no reference transcripts in production. Clinicians do correct the text before saving.
+**Setup.** The server from episode 5 is still running, including the **watcher** (port 8060). Open two browser tabs: http://127.0.0.1:8060 (the alert inbox, a stand-in for the team's Telegram group) and http://127.0.0.1:8050 (the monitor). We simulate four clinic days:
+
+- **Day 1:** the usual headsets.
+- **Days 2-3:** the facility gets a batch of cheap phones (we simulate the channel: 8 kHz, band-pass, noise).
+- **Day 4:** headsets are back, but a cholera outbreak has started. Notes now contain terms the model never learned (ኮሌራ, ኦአርኤስ, አጣዳፊ የውሃ ተቅማጥ). This part is simulated at text level: the terms go into the note the clinician saves.
+
+There are no reference transcripts in production. Clinicians do correct the text before saving, and we keep only *how much* they changed (the edit rate), never the text.
 
 ```bash
-python scripts/simulate_clinic.py --url http://127.0.0.1:8000 --days 3 --per-day 20
+python scripts/simulate_clinic.py --url http://127.0.0.1:8000     # 4 days x 20 dictations, about 2 min
 ```
 
-**Wrong path.** Watch only uptime, errors and latency.
+**Wrong path 1.** Watch only uptime, errors and latency.
 
-**The issue appears.** Those look harmless: no errors, every request answered, latency a little higher on days 2-3 (easy to blame the server). But:
+**The issue appears.** Every request was answered and nothing crashed. But:
 ```
 day 1 (usual headset): ok 20, rejected 0, empty 0, mean clinician edit rate 0.115
 day 2 (new phones): ok 18, rejected 2, empty 0, mean clinician edit rate 0.792
 day 3 (new phones): ok 18, rejected 2, empty 0, mean clinician edit rate 0.792
-annotation queue: 40 clips -> data\annotation\queue.csv
+day 4 (outbreak notes): ok 20, rejected 0, empty 0, mean clinician edit rate 0.378
 ```
-Clinicians now rewrite four fifths of every note. (Days 2 and 3 replay the same 20 recordings, so they match exactly.) In the offline evaluation (episode 4) the phone channel had CER 83%: the model is unusable on these devices.
+On the new phones, clinicians rewrite four fifths of every note. In the offline evaluation (episode 4) the phone channel had CER 83%: the model is unusable on these devices. On day 4 the audio is fine again, yet clinicians still correct three times more than on day 1.
 
-**PAUSE.** Which signals could have told you on day 2 morning, without any labels? What happens next with those clips?
-
-**Our fix.** Label-free monitoring from the request log (`src/asr/monitor.py`): per model version and window, the median signal-to-noise ratio (a microphone fingerprint), empty-output rate, rejections, latency; plus the **clinician edit rate** (CER between what we returned and what was saved). Clips with edit rate above 0.20 go to an annotation queue, by clip id, never the audio in the log.
+**Wrong path 2.** The first fix most teams propose: "send an alert whenever a request looks bad". Replay the same four days through that rule:
 ```bash
-python -m asr.monitor --window 20                    # or open http://127.0.0.1:8050
+python -m asr.watcher --replay --mode naive
 ```
-**Check.**
+```
+naive mode: 82 messages would be sent {'edits': 52, 'snr': 26, 'rejected': 4}
+```
+82 messages in four days, for one facility. By day 2 the group has muted the channel, and the alert that matters is lost among the others.
+
+**PAUSE.** (1) Which signals could have told you on day 2, without any labels? (2) How do you alert so that people keep reading the alerts? (3) What may the system do on its own, and what must a person decide? (4) Are days 2-3 and day 4 the same kind of problem?
+
+**Our fix.** Three layers.
+
+1. **Label-free signals** per window of requests (`src/asr/monitor.py`): median signal-to-noise ratio (a microphone fingerprint), empty outputs, rejections, latency, and the clinician edit rate.
+2. **Alert rules written down** in `configs/params.yaml` (`alerts:`), approved with the monitoring plan (`docs/MONITORING_PLAN.md`). A rule fires only when it holds for **2 windows in a row**. Each rule has a severity (P1 now, P2 same day) and a named owner. The watcher sends **one message per problem** and one when it clears.
+3. **Safe automatic actions**, listed in the rule: queue the high-edit clips for annotation (by clip id, never audio), and open a **draft Gate 3 review** with the evidence. Nothing here retrains or promotes a model: that is a person's decision.
+
+The rules also tell the two problems apart:
+- **Data drift:** SNR down and edits up. The inputs changed.
+- **Concept drift:** SNR normal and edits up. The right answer changed.
+
+**Check.** The inbox at http://127.0.0.1:8060 (or `python -m asr.watcher --replay` in the terminal) shows three messages:
+```
+P2  Data drift: new microphones or phones (SNR dropped)
+    snr_db_median = 3.4 for 2 windows in a row (threshold < 15)
+    requests 21-40: SNR median 5.0, 3.4 dB; edit rate 0.6, 0.984
+    Owner: ASR lead. Next step: find the device batch, evaluate the champion on its audio, Gate 3 review
+    ✓ 18 clips to the annotation queue (data/annotation/queue.csv)
+    ✓ draft Gate 3 record logs/gate3/gate3_DRAFT_<date>_channel_shift.md
+RESOLVED  new microphones or phones (SNR dropped): back to normal
+    window 61-70: snr_db_median = 43.5
+P2  Concept drift: clinicians correct more, audio unchanged
+    edit_rate = 0.415 for 2 windows in a row (threshold > 0.3)
+    requests 61-80: SNR median 43.5, 40.7 dB; edit rate 0.342, 0.415
+    Owner: ASR lead. Next step: read the corrected notes for new terms, plan a retraining (new candidate, then Gate 2)
+    ✓ 20 clips to the annotation queue (data/annotation/queue.csv)
+    ✓ draft Gate 3 record logs/gate3/gate3_DRAFT_<date>_notes_changed.md
+```
+Three messages instead of 82. The data-drift alert fires at the end of day 2, from audio statistics alone, before any clinician complains. Persistence costs one window of delay; that is the price of not crying wolf. Open a Gate 3 draft (`cat logs/gate3/*channel_shift.md`): the evidence table is already filled in, and the decision field says **pending, a person decides**. The monitor page (http://127.0.0.1:8050, or `python -m asr.monitor --window 20`) shows the same story per window:
 ```
 model_version window  requests  rejected  empty_rate  p50_ms   p95_ms  snr_db_median  edit_rate        alerts
-   tiny-600hr   1-20        20       0.0         0.0 2695.45 3965.905           42.4      0.115             -
-   tiny-600hr  21-40        20       0.1         0.0 2422.95 4531.465            4.8      0.792 CHANNEL,EDITS
-   tiny-600hr  41-60        20       0.1         0.0 1924.85 4277.185            4.8      0.792 CHANNEL,EDITS
+   tiny-600hr   1-20        20       0.0         0.0 1400.50 2023.920           42.4      0.115             -
+   tiny-600hr  21-40        20       0.1         0.0 1227.60 3015.415            4.8      0.792 CHANNEL,EDITS
+   tiny-600hr  41-60        20       0.1         0.0 1225.45 2988.140            4.8      0.792 CHANNEL,EDITS
+   tiny-600hr  61-80        20       0.0         0.0 1430.80 2068.350           42.4      0.378         EDITS
 ```
-(Load-test requests from episode 5 are tagged `loadtest` and left out; `start_server.sh` starts each deployment with fresh logs and keeps the old ones under a dated name.) The SNR alarm needs no clinician at all: it fires on the first window of new phones. The p95 rise is a symptom too: on noisy audio the model rambles on until the token limit. The edit rate confirms the users feel it. The queue feeds the next training round (episode 8 and 9).
-**F08** acquisition / device drift, **F20** feedback loop missing. Rule **MON-01** (`docs/MONITORING_PLAN.md`).
+To send the same messages to a real Telegram group, put `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` in `.env` (never in git). Messages that cannot be sent (no internet) are kept and retried. The queue feeds the next training round (episodes 8 and 9).
+**F08** acquisition / device drift, **F05** concept drift, **F20** feedback loop missing. Rule **MON-01** (`docs/MONITORING_PLAN.md`).
 
 ---
 
@@ -310,22 +368,28 @@ curl -s -X POST -F percent=50 http://127.0.0.1:8000/admin/canary
 python scripts/simulate_clinic.py --url http://127.0.0.1:8000 --days 1 --per-day 40
 python -m asr.monitor --window 40
 ```
-**The issue appears.**
+**The issue appears.** Watch the inbox while the clinic runs. After 30 requests:
 ```
-  model_version window  requests  rejected  empty_rate  p50_ms  p95_ms  snr_db_median  edit_rate alerts
-     tiny-600hr   1-20        20       0.0         0.0  2426.9 3871.85           42.7      0.111      -
-tiny-600hr-int8   1-20        20       0.0         0.0  2267.0 3950.73           42.2      0.228      -
+P1  Canary: candidate clearly worse than champion
+    edit_rate_gap = 0.068 for 2 windows in a row (threshold > 0.05)
+    requests 1-30: SNR median 42.5, 42.1 dB; edit rate 0.147, 0.2
+    tiny-600hr-int8 vs champion edit rate gap: 0.069, 0.068
+    Owner: Ops owner. Next step: keep the champion; the candidate goes back to validation
+    ✓ canary rolled back: gateway now sends 0% to the candidate
 ```
-Same audio quality (SNR 42), but clinicians edit **23%** of the int8 output against **11%** for the champion. Latency is about the same (int8 is not faster here). No alert fired: 0.228 is under the 0.30 threshold, so someone has to compare the two rows. (The gateway splits by a hash of the recording, so the same clip always goes to the same model and this run repeats exactly. In production, hash the facility or clinician id.)
+Same audio quality, but clinicians edit the int8 output much more. The *absolute* edit rate never crossed 0.30, so the episode 6 rules alone would have stayed silent. Here the comparison is **between versions on the same traffic**: each check pools 2 windows (about 10 corrected notes per version), because 5 notes are too few to judge.
 
-**PAUSE.** Who decides to roll back, using which number, and how fast can you do it?
+**PAUSE.** The watcher rolled back on its own. Should it have? What would you never let it do on its own?
 
-**Our fix.** The gateway splits by percentage, every response carries `model_version`, and rollback is one call:
+**Our fix, and why the rollback may be automatic.** Rollback is safe and reversible: the champion has already passed Gate 2, and one call restores it. The rule and its action were written in the Gate 2 record before the canary started. Promotion is the opposite: it is never automatic. Check that the gateway is back on the champion; the manual rollback is the same single call:
 ```bash
-curl -s -X POST -F percent=0 http://127.0.0.1:8000/admin/canary
-curl -s -F audio=@data/gate_samples/good.wav http://127.0.0.1:8000/transcribe | grep -o '"model_version":"[^"]*"'
-#  "model_version":"tiny-600hr"
+curl -s http://127.0.0.1:8000/health | grep -o '"canary_percent":[0-9.]*'
+#  "canary_percent":0.0
+curl -s -X POST -F percent=0 http://127.0.0.1:8000/admin/canary          # manual rollback, one call
+python -m asr.monitor --window 40
 ```
+The monitor shows how many requests reached the int8 model before the rollback (about 15 of 40; the exact number depends on timing). The gateway splits by a hash of the recording, so the same clip always goes to the same model. In production, hash the facility or clinician id.
+
 **Privacy, same episode.** A developer turns on transcript logging "to debug":
 ```bash
 mkdir -p logs/naive
@@ -338,9 +402,36 @@ The log line now ends with `"text": "..."`: in a clinic that is a diagnosis, a n
 **F19** unsafe deployment (rollback), **F18** privacy leak in logs. Rules **GOV-01**, **SEC-02** (PDPP 1321/2024), **LOG-01**.
 
 ```bash
-bash scripts/start_server.sh stop          # stops all five services, including the debug one on :8003
+bash scripts/start_server.sh stop          # stops every service, including the debug one on :8003
 rm -rf logs/naive                          # delete the transcripts you just logged
 ```
+
+---
+
+## Wrap-up. Does this project meet the framework? (5 min)
+
+Run the workshop toolkit on the project you just used. Install it once from the take-home pack (`toolkit/` on the USB stick):
+```bash
+uv pip install path/to/eaii_mlops-0.1.0-py3-none-any.whl --python .venv/Scripts/python.exe
+eaii-mlops check .
+```
+```
+[ERROR] GOV-01  Gate 2 approval record exists before deployment (docs/approvals/)
+[WARN] LOG-01  Structured logging in src/ (no bare print), no personal data logged
+Summary: 1 rule(s) with errors (1 findings), 1 rule(s) with warnings (8 findings), 16 passed.
+```
+We have been serving the champion all morning without a signed Gate 2 record. Write it now, as the approver would, with the evidence from episodes 1-7:
+```bash
+eaii-mlops gate --stage 2 --model tiny-600hr --version 1 --approver "<your name>" --role "ASR lead" \
+  --decision approved-with-conditions --conditions "Pilot facilities, headsets only; watcher alerts on" \
+  --evidence model_card=docs/model_card.md dataset_card=docs/dataset_card.md evaluation=results/tiny-600hr.json \
+             monitoring_plan=docs/MONITORING_PLAN.md rollback=tiny-600hr --no-input
+eaii-mlops check .
+```
+```
+Summary: 0 rule(s) with errors (0 findings), 1 rule(s) with warnings (8 findings), 17 passed.
+```
+Open the record in `docs/approvals/`: the evidence still marked *pending* (MLflow run link, fairness results) is what a real approver would ask for before signing. The LOG-01 warning is the command-line reports printing to the terminal, an exception the README explains. A green check is the floor, not the ceiling: it proves the evidence exists, not that the model is good.
 
 ---
 
@@ -374,4 +465,4 @@ The same `/transcribe` contract is used by the EthioEMR assistant's Speak button
 
 ## If something fails
 
-Pre-computed outputs are in `results/precomputed/` (evaluation JSON and hypotheses for all three models, load-test results, request and feedback logs, monitor page). `python scripts/promote.py` falls back to them when `results/` has no run of its own; the monitor page from episode 6 is `results/precomputed/monitor_after_clinic.html`.
+Pre-computed outputs are in `results/precomputed/` (evaluation JSON and hypotheses for all three models, load-test results, request, feedback and alert logs, monitor page). `python scripts/promote.py` falls back to them when `results/` has no run of its own; the monitor page from episode 6 is `results/precomputed/monitor_after_clinic.html`.
